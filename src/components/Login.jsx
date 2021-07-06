@@ -1,6 +1,8 @@
 import React,{useState} from 'react'
+import {auth,db} from "../firebase"
+import {withRouter} from "react-router-dom"
 
-const Login = () => {
+const Login = (props) => {
     const [email, setEmail] = useState('')
     const [emailVa, setEmailVa] = useState(false)
     const [pass, setPass] = useState('')
@@ -20,7 +22,7 @@ const Login = () => {
         }
         setEmailVa(false)
         if(!pass.trim()){
-            console.log("sin contraseña")
+            // console.log("sin contraseña")
             setPassVa(true)
             setMensajeAlert([
                 {inputPass: 'debe ingresar la Contraseña',inputUser:''}
@@ -33,9 +35,83 @@ const Login = () => {
             ])
             return
         }
-        setMensajeAlert([])
-        setPassVa(false)
+        
+        if(esResgitro){
+            registrar()
+        }else{
+            loguearse()
+        }
+        // setMensajeAlert([])
+        // setPassVa(false)
     }
+
+    const loguearse= React.useCallback(async()=>{
+        try {
+            const res =await auth.signInWithEmailAndPassword(email,pass)
+            // console.log(res);
+            setPassVa(false)
+            setEmailVa(false)
+            setEmail('')
+            setPass('')
+            setEsResgitro(false)
+            setMensajeAlert([])
+            props.history.push('/admin')
+        } catch (error) {
+            console.log(error);
+            if(error.code==="auth/invalid-email"){
+                setMensajeAlert([
+                    {inputPass:'',inputUser: error.message}
+                ])
+                setEmailVa(true)
+                setPassVa(false)
+            }else if(error.code==="auth/wrong-password"){
+                setMensajeAlert([
+                    
+                    {inputUser:'',inputPass: error.message}
+                ])
+                setEmailVa(false)
+                setPassVa(true)
+            }else if(error.code==="auth/user-not-found"){
+                setMensajeAlert([
+                    {inputPass:'',inputUser: error.message}
+                ])
+                
+                setEmailVa(true)
+                setPassVa(false)
+            }
+            
+        }
+    },[email,pass])
+
+    const registrar= React.useCallback(async()=>{
+        try {
+            const res =await auth.createUserWithEmailAndPassword(email,pass)
+            await db.collection('usuarios').doc(res.user.email).set({
+                email:res.user.email,
+                uid:res.user.uid,
+            })
+            setEmail('')
+            setPass('')
+            setEsResgitro(false)
+            setMensajeAlert([])
+            // console.log(res);
+        } catch (error) {
+            if(error.code==="auth/invalid-email"){
+                setMensajeAlert([
+                    {inputPass:'',inputUser: error.message}
+                ])
+                setEmailVa(true)
+                setPassVa(false)
+            }else if(error.code==="auth/email-already-in-use"){
+                setMensajeAlert([
+                    {inputPass:'',inputUser: error.message}
+                ])
+                setEmailVa(true)
+                setPassVa(false)
+            }
+            // console.log(error);
+        }
+    },[email,pass])
 
     return (
         <div className="mt-5">
@@ -88,4 +164,4 @@ const Login = () => {
     )
 }
 
-export default Login
+export default withRouter(Login)
