@@ -3,7 +3,7 @@ import React, { useState } from 'react'
 import {db } from '../../../firebase'
 
 function Formulario(props) {
-    const { tareas, setTareas, modoEdicion, serModoEdicion, setIdTarea, idTarea, tarea, setTarea, descripcionTarea, setDescripcionTarea } = props;
+    const {user,tareas, setTareas, modoEdicion, serModoEdicion, setIdTarea, idTarea, tarea, setTarea, descripcionTarea, setDescripcionTarea } = props;
 
     const [validaInputAgregar, setFalidaInputAgregar] = useState(false)
     const [validaInputAgregarDes, setFalidaInputAgregarDes] = useState(false)
@@ -28,7 +28,7 @@ function Formulario(props) {
                 fecha: Date.now(),
                 descripcion: descripcionTarea
             }
-            const data = await db.collection('homeWork').add(nuevaTarea)
+            const data = await db.collection(user.uid).add(nuevaTarea)
             setTareas([
                 ...tareas,
                 { ...nuevaTarea, id: data.id }
@@ -55,7 +55,7 @@ function Formulario(props) {
         setFalidaInputAgregarDes(false)
         try {
             // const db = firebase.firestore()
-            await db.collection('homeWork').doc(idTarea).update({
+            await db.collection(user.uid).doc(idTarea).update({
                 name: tarea,
                 descripcion: descripcionTarea
             })

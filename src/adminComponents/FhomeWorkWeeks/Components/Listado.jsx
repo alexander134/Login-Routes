@@ -2,13 +2,13 @@ import React, { useEffect } from 'react'
 import { db } from '../../../firebase'
 
 function Listado(props) {
-    const { tareas, setTareas, serModoEdicion, setIdTarea, setTarea, setDescripcionTarea } = props;
+    const {user, tareas, setTareas, serModoEdicion, setIdTarea, setTarea, setDescripcionTarea } = props;
 
     useEffect(() => {
         const obtnerTareas = async () => {
             try {
                 // const db = firebase.firestore()
-                const data = await db.collection('homeWork').get()
+                const data = await db.collection(user.uid).get()
                 const arrayData = await data.docs.map(doc => ({ id: doc.id, ...doc.data() }))
                 setTareas(arrayData)
             } catch (error) {
@@ -22,7 +22,7 @@ function Listado(props) {
     const eliminarTarea = async (id) => {
         try {
             // const db = firebase.firestore()
-            await db.collection('homeWork').doc(id).delete()
+            await db.collection(user.uid).doc(id).delete()
             const arrayFiltrado = tareas.filter(item => item.id !== id)
             setTareas(arrayFiltrado)
         } catch (error) {

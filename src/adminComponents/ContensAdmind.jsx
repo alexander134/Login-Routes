@@ -10,7 +10,7 @@ const ContensAdmind = (props) => {
                     <div className="col-sm-12">
                         <h2 className="text-center text-info">Tareas Asignadas</h2>
                     </div>
-                    <HomeWorksWeeks />
+                    <HomeWorksWeeks user={user} />
                 </div>
             )}
         </div>

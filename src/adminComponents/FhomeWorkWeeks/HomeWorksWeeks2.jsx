@@ -2,7 +2,8 @@ import React, { useState } from 'react'
 import Listado from './Components/Listado'
 import Formulario from './Components/Formulario'
 
-function HomeWorksWeeks2() {
+function HomeWorksWeeks2(props) {
+    const {user}=props
     const [tareas, setTareas] = useState([])
     const [modoEdicion, serModoEdicion] = useState(false)
     const [idTarea, setIdTarea] = useState("")
@@ -11,13 +12,17 @@ function HomeWorksWeeks2() {
     return (
         <div className="container mt-3">
             <div className="row">
-                <Listado tareas={tareas}
+                <Listado 
+                    user={user}
+                    tareas={tareas}
                     setTareas={setTareas}
                     serModoEdicion={serModoEdicion}
                     setIdTarea={setIdTarea}
                     setTarea={setTarea}
                     setDescripcionTarea={setDescripcionTarea} /> 
-                <Formulario tareas={tareas}
+                <Formulario 
+                    user={user}
+                    tareas={tareas}
                     setTareas={setTareas}
                     modoEdicion={modoEdicion}
                     serModoEdicion={serModoEdicion}
