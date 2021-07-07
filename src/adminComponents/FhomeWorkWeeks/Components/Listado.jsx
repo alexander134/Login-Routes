@@ -16,7 +16,7 @@ function Listado(props) {
             }
         }
         obtnerTareas();
-    }, [setTareas])
+    }, [setTareas,user.uid])
 
 
     const eliminarTarea = async (id) => {
