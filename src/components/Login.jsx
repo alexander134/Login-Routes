@@ -3,9 +3,9 @@ import {auth,db} from "../firebase"
 import {withRouter} from "react-router-dom"
 
 const Login = (props) => {
-    const [email, setEmail] = useState('')
+    const [email, setEmail] = useState('alex@alex.com')
     const [emailVa, setEmailVa] = useState(false)
-    const [pass, setPass] = useState('')
+    const [pass, setPass] = useState('123456')
     const [passVa, setPassVa] = useState(false)
     const [mensajeAlert, setMensajeAlert] = useState([])
     const [esResgitro, setEsResgitro] = useState(false)
@@ -48,7 +48,7 @@ const Login = (props) => {
     const loguearse= React.useCallback(async()=>{
         try {
             const res =await auth.signInWithEmailAndPassword(email,pass)
-            // console.log(res);
+            console.log(res);
             setPassVa(false)
             setEmailVa(false)
             setEmail('')
@@ -81,7 +81,7 @@ const Login = (props) => {
             }
             
         }
-    },[email,pass])
+    },[email,pass,props.history])
 
     const registrar= React.useCallback(async()=>{
         try {
@@ -90,11 +90,16 @@ const Login = (props) => {
                 email:res.user.email,
                 uid:res.user.uid,
             })
+            await db.collection(res.user.uid).add({
+                name:'Tarea de Muestra',
+                fecha: Date.now()
+            })
             setEmail('')
             setPass('')
             setEsResgitro(false)
             setMensajeAlert([])
             // console.log(res);
+            props.history.push('/admin')
         } catch (error) {
             if(error.code==="auth/invalid-email"){
                 setMensajeAlert([
@@ -111,7 +116,7 @@ const Login = (props) => {
             }
             // console.log(error);
         }
-    },[email,pass])
+    },[email,pass,props.history])
 
     return (
         <div className="mt-5">
