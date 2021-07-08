@@ -28,6 +28,7 @@ function Formulario(props) {
                 fecha: Date.now(),
                 descripcion: descripcionTarea
             }
+            
             const data = await db.collection(user.uid).add(nuevaTarea)
             setTareas([
                 ...tareas,

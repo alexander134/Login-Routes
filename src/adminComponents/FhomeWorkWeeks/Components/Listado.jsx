@@ -15,6 +15,7 @@ function Listado(props) {
                 console.log("error al ir al firestore");
             }
         }
+        
         obtnerTareas();
     }, [setTareas,user.uid])
 
