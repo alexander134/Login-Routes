@@ -38,6 +38,9 @@ const Navbar = (props) => {
                     </NavLink>
                     )
                 }
+                <NavLink className="btn btn-dark mr-2" to="/redux" exact activeClassName="active">
+                    Redux
+                </NavLink>
                 
             </div>
         </div>

@@ -5,6 +5,7 @@ import Home from "./components/Home"
 import Login from "./components/Login"
 import Admin from "./components/Admin"
 import Reset from "./components/Reset"
+import Redux from "./components/Redux"
 import {auth} from "./firebase"
 
 function App() {
@@ -37,6 +38,9 @@ function App() {
           </Route>
           <Route path="/admin">
             <Admin/>
+          </Route>
+          <Route path="/redux">
+            <Redux/>
           </Route>
         </Switch>
       </div>
