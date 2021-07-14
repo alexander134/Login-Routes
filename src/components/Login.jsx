@@ -1,6 +1,8 @@
-import React,{useState} from 'react'
+import React,{useState,useEffect} from 'react'
 import {auth,db} from "../firebase"
 import {withRouter} from "react-router-dom"
+import {useDispatch,useSelector} from 'react-redux'
+import {ingresoUsuarioAccion} from '../Redux/usuarioDucks'
 
 const Login = (props) => {
     const [email, setEmail] = useState('alex@alex.com')
@@ -10,7 +12,19 @@ const Login = (props) => {
     const [mensajeAlert, setMensajeAlert] = useState([])
     const [esResgitro, setEsResgitro] = useState(false)
 
+    const dispatch =useDispatch()
+    const loading =useSelector(store=>store.usuarioGoogle.loading)
+    const activo =useSelector(store=>store.usuarioGoogle.activo)
+    // console.log(loading);
     
+
+    useEffect(() => {
+        console.log(activo);
+        if(activo){
+            props.history.push('/redux')
+        }
+    }, [activo,props.history])
+
     const procesarDatos =(e)=>{
         e.preventDefault()
         if(!email.trim()){
@@ -119,6 +133,7 @@ const Login = (props) => {
     },[email,pass,props.history])
 
     return (
+        <>
         <div className="mt-5">
             <h3 className="text-center">
             {
@@ -175,6 +190,12 @@ const Login = (props) => {
                 </div>
             </div>
         </div>
+        <div className="mt-5 text-center">
+            <h3>Ingreso Con Google</h3>
+            <hr />
+            <button className="btn btn-sm btn-dark" disabled={loading} onClick={()=>dispatch(ingresoUsuarioAccion())}>Acceder</button>
+        </div>
+        </>
     )
 }
 

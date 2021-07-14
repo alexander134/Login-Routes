@@ -45,7 +45,7 @@ function App() {
         </Switch>
       </div>
     </Router>
-  ):<p>Loafing ...</p>;
+  ):<p>Loading ...</p>;
 }
 
 export default App;
