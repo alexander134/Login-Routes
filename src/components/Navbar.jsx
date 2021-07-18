@@ -1,10 +1,10 @@
 import React from 'react'
 import {Link,NavLink} from 'react-router-dom'
-// import {auth} from "../firebase"
+import {auth} from "../firebase"
 import {withRouter} from "react-router-dom"
 
 
-import {useDispatch} from 'react-redux'
+import {useDispatch,useSelector} from 'react-redux'
 import {cerrarSesionUsuarioAccion} from '../Redux/usuarioDucks.js'
 
 const Navbar = (props) => {
@@ -12,13 +12,15 @@ const Navbar = (props) => {
     const {firebase}=props
 
     const dispatch= useDispatch()
+    const activo=useSelector(store => store.usuarioGoogle.activo)
 
     const cerrarSesion =()=>{
         dispatch(cerrarSesionUsuarioAccion())
-        props.history.push('/login')
-        /* auth.signOut().then(()=>{
+        
+        auth.signOut().then(()=>{
             props.history.push('/login')
-        })*/
+        })
+        props.history.push('/login')
         
     }
 
@@ -30,7 +32,7 @@ const Navbar = (props) => {
                     Inicio
                 </NavLink>
                 {
-                    firebase!== null ?(
+                    firebase!== null &&(
                         <>
                         <NavLink className="btn btn-dark mr-2" to="/admin" activeClassName="active" >
                             Admin
@@ -39,10 +41,11 @@ const Navbar = (props) => {
                             Redux
                         </NavLink>
                         </>
-                    ): null
+                    )
                 }
                 {
-                    firebase!== null?(
+                    // firebase!== null?(
+                        activo || (firebase!== null) ?(
                         <button className="btn btn-dark" onClick={()=>cerrarSesion()}>Cerrar Sesión</button>
                     )
                     :
@@ -52,7 +55,7 @@ const Navbar = (props) => {
                     </NavLink>
                     )
                 }
-               <button className="btn btn-dark" onClick={()=>cerrarSesion()}>2Salir</button>
+               {/* <button className="btn btn-dark" onClick={()=>cerrarSesion()}>2Salir</button> */}
             </div>
         </div>
     )

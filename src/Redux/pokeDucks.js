@@ -41,7 +41,7 @@ export const ApiObtenerDetallePoke = (url="https://pokeapi.co/api/v2/pokemon/1/"
             type:OBTENER_DETALLE_POKEMON_EXITO,
             payload:JSON.parse(localStorage.getItem(url))
         })
-        console.log("localStorage");
+        console.log("localStorage-pokemon");
         return
     }
     try {
@@ -61,7 +61,7 @@ export const ApiObtenerDetallePoke = (url="https://pokeapi.co/api/v2/pokemon/1/"
             alto:res.data.height,
             foto:res.data.sprites.front_default
         }))
-        console.log("api");
+        console.log("api-pokemon");
     } catch (error) {
         console.log(error);
     }

@@ -23,21 +23,7 @@ const Pokemones = () => {
             <div className="row">
                 <div className="col-md-6">
                     <h2>lista de pokemones</h2>
-                    <div className="d-flex justify-content-between">
-                    {
-                        pokemonesDatos.length ===0 &&
-                        <button className="btn btn-dark mr-2" onClick={()=>dispatch(ApiObtenerPokeAccion())} >obtener pokemones</button>
-                    }
-                     {
-                        previous &&
-                        <button className="btn btn-success  mr-2" onClick={()=>dispatch(ApiAnterioresObtenerPokeAccion())} >Anteriores pokemones</button>
-                    }
-                    {
-                        next &&
-                        <button className="btn btn-success  ml-2" onClick={()=>dispatch(ApiSiguenteObtenerPokeAccion())} >siguentes pokemones</button>
-                    }
-                   
-                    </div>
+                    
                     
                     <br />
                 
@@ -54,6 +40,21 @@ const Pokemones = () => {
                         ))
                     }
                     </ul>
+                    <div className="d-flex justify-content-between mt-2">
+                    {
+                        pokemonesDatos.length ===0 &&
+                        <button className="btn btn-dark mr-2" onClick={()=>dispatch(ApiObtenerPokeAccion())} >obtener pokemones</button>
+                    }
+                     {
+                        previous &&
+                        <button className="btn btn-success  mr-2" onClick={()=>dispatch(ApiAnterioresObtenerPokeAccion())} >Anteriores pokemones</button>
+                    }
+                    {
+                        next &&
+                        <button className="btn btn-success  ml-2" onClick={()=>dispatch(ApiSiguenteObtenerPokeAccion())} >siguentes pokemones</button>
+                    }
+                   
+                    </div>
                 </div>
 
                 

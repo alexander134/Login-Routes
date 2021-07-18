@@ -19,7 +19,7 @@ const Login = (props) => {
     
 
     useEffect(() => {
-        console.log(activo);
+        // console.log(activo); // es el logion google
         if(activo){
             props.history.push('/redux')
         }
@@ -62,7 +62,9 @@ const Login = (props) => {
     const loguearse= React.useCallback(async()=>{
         try {
             const res =await auth.signInWithEmailAndPassword(email,pass)
-            console.log(res);
+            console.log(res.user.uid);
+            localStorage.setItem('usuario2',res.user.uid)
+            console.log("entra usuario firestore");
             setPassVa(false)
             setEmailVa(false)
             setEmail('')

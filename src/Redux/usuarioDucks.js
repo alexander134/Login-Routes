@@ -13,6 +13,9 @@ const USUARIO_EXITO='USUARIO_EXITO'
 const CERRAR_SESION='CERRAR_SESION'
 //reducer
 export default function usuarioReducer(state=dataInicial,action) {
+    // debugger;
+    // console.log(state);
+    // console.log(action.type);
     switch (action.type) {
         case LOADING:
             return{...state, loading:true}
@@ -48,6 +51,7 @@ export const ingresoUsuarioAccion =() =>async(dispatch)=>{
             uid: res.user.uid,
             email: res.user.email
         }))
+        console.log("entra usuario google");
     } catch (error) {
         console.log(error);
         dispatch({
@@ -58,16 +62,22 @@ export const ingresoUsuarioAccion =() =>async(dispatch)=>{
 
 
 export const leerUsuarioActivoAccion =() =>(dispatch)=>{
-    dispatch({
-        type:USUARIO_EXITO,
-        payload:JSON.parse(localStorage.getItem('usuario'))
-    })
+    if(localStorage.getItem('usuario')){
+        // console.log(localStorage.getItem('usuario'));
+        dispatch({
+            type:USUARIO_EXITO,
+            payload:JSON.parse(localStorage.getItem('usuario'))
+        })
+    }
+    console.log("lee usuario");
 }
 
 export const cerrarSesionUsuarioAccion =() =>(dispatch)=>{
     auth.signOut()
     localStorage.removeItem('usuario')
+    localStorage.removeItem('usuario2')
     dispatch({
         type:CERRAR_SESION
     })
+    console.log("cierra usuario google");
 }

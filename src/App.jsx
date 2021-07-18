@@ -1,26 +1,48 @@
 import React, { useState,useEffect } from 'react';
-import {BrowserRouter as Router, Switch, Route} from 'react-router-dom'
+import {BrowserRouter as Router, Switch, Route,Redirect} from 'react-router-dom'
 import Navbar from './components/Navbar';
 import Home from "./components/Home"
 import Login from "./components/Login"
 import Admin from "./components/Admin"
 import Reset from "./components/Reset"
-import Redux from "./components/Redux"
+import ReduxCompanent from "./components/Redux"
 import {auth} from "./firebase"
 
 function App() {
   const [firebase, setFirebase] = useState(false)
   useEffect(() => {
-    auth.onAuthStateChanged(user=>{
-      // console.log(user)
-      if(user){
-        setFirebase(user)
-      }else{
-        setFirebase(null)
-      }
-    })
-    
+    const fetchUser=()=>{
+      auth.onAuthStateChanged(user=>{
+        // console.log(user)
+        if(user){
+          setFirebase(user)
+        }else{
+          setFirebase(null)
+        }
+      })
+    }
+    fetchUser()
 }, [])
+
+  const RutaPrivada =({component,path,...rest})=>{
+    debugger;
+    if(localStorage.getItem('usuario') || localStorage.getItem('usuario2')){
+      let usuarioStorage=""
+      if(localStorage.getItem('usuario2')){
+        usuarioStorage=localStorage.getItem('usuario2')
+      }else{
+        usuarioStorage=JSON.parse(localStorage.getItem('usuario'))
+        usuarioStorage=usuarioStorage.uid
+      }
+      if(usuarioStorage === firebase.uid){
+       return <Route component={component} path={path} {...rest}/>
+      }else{
+        return <Redirect to="/login" {...rest}/>
+      }
+    }else{
+      return <Redirect to="/login" {...rest}/>
+    }
+  }
 
   return firebase!== false ?(
     <Router>
@@ -36,12 +58,8 @@ function App() {
           <Route path="/reset">
             <Reset/>
           </Route>
-          <Route path="/admin">
-            <Admin/>
-          </Route>
-          <Route path="/redux">
-            <Redux/>
-          </Route>
+          <RutaPrivada component={Admin} path="/admin"/>
+          <RutaPrivada component={ReduxCompanent} path="/redux"/>
         </Switch>
       </div>
     </Router>
