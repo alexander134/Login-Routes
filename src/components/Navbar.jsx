@@ -34,6 +34,9 @@ const Navbar = (props) => {
                 {
                     firebase!== null &&(
                         <>
+                        <NavLink className="btn btn-dark mr-2" to="/perfil" activeClassName="active" >
+                            Perfil
+                        </NavLink>
                         <NavLink className="btn btn-dark mr-2" to="/admin" activeClassName="active" >
                             Admin
                         </NavLink>

@@ -3,6 +3,7 @@ import {BrowserRouter as Router, Switch, Route,Redirect} from 'react-router-dom'
 import Navbar from './components/Navbar';
 import Home from "./components/Home"
 import Login from "./components/Login"
+import Perfil from "./components/Perfil"
 import Admin from "./components/Admin"
 import Reset from "./components/Reset"
 import ReduxCompanent from "./components/Redux"
@@ -25,7 +26,6 @@ function App() {
 }, [])
 
   const RutaPrivada =({component,path,...rest})=>{
-    debugger;
     if(localStorage.getItem('usuario') || localStorage.getItem('usuario2')){
       let usuarioStorage=""
       if(localStorage.getItem('usuario2')){
@@ -59,6 +59,7 @@ function App() {
             <Reset/>
           </Route>
           <RutaPrivada component={Admin} path="/admin"/>
+          <RutaPrivada component={Perfil} path="/perfil"/>
           <RutaPrivada component={ReduxCompanent} path="/redux"/>
         </Switch>
       </div>

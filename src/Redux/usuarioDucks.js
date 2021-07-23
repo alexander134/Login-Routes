@@ -1,4 +1,4 @@
-import {auth,firebase} from '../firebase'
+import {auth,firebase, db} from '../firebase'
 
 // Constantes
 const dataInicial ={
@@ -39,19 +39,37 @@ export const ingresoUsuarioAccion =() =>async(dispatch)=>{
     try {
         const provider =new firebase.auth.GoogleAuthProvider();
         const res = await auth.signInWithPopup(provider)
-        // console.log(res);
-        dispatch({
-            type:USUARIO_EXITO,
-            payload:{
-                uid: res.user.uid,
-                email: res.user.email
-            }
-        })
-        localStorage.setItem('usuario', JSON.stringify({
+        //console.log(res.user);
+        
+        const usuarioPerfil ={
             uid: res.user.uid,
-            email: res.user.email
-        }))
-        console.log("entra usuario google");
+            email: res.user.email,
+            displayName:res.user.displayName,
+            photoURL:res.user.photoURL
+        }
+        console.log(usuarioPerfil.email);
+        const usuarioDB = await db.collection('usuarios').doc(usuarioPerfil.email).get()
+        //console.log(usuarioDB);
+        if(usuarioDB.exists){
+            const usuarioDB = await db.collection('usuarios').doc(usuarioPerfil.email).get()
+            dispatch({
+                type:USUARIO_EXITO,
+                payload:usuarioDB.data()
+            })
+            localStorage.setItem('usuario', JSON.stringify(usuarioDB.data()))
+            console.log("entra usuario google");
+        }else{
+            // no exite el usuario en firestore
+            await db.collection('usuarios').doc(usuarioPerfil.email).set(usuarioPerfil)
+            dispatch({
+                type:USUARIO_EXITO,
+                payload:usuarioPerfil
+            })
+            localStorage.setItem('usuario', JSON.stringify(usuarioPerfil))
+            console.log("entra usuario google");
+        }
+        
+        
     } catch (error) {
         console.log(error);
         dispatch({
