@@ -1,4 +1,4 @@
-import {auth,firebase, db} from '../firebase'
+import {auth,firebase, db,storage} from '../firebase'
 
 // Constantes
 const dataInicial ={
@@ -98,4 +98,62 @@ export const cerrarSesionUsuarioAccion =() =>(dispatch)=>{
         type:CERRAR_SESION
     })
     console.log("cierra usuario google");
+}
+
+export const actualuzarNombreUsuario =(NombreUsuarioActualizado) => async(dispatch,getState)=>{
+    dispatch({
+        type:LOADING
+    })
+    const {user} =getState().usuarioGoogle
+    // console.log(user);
+    //console.log(NombreUsuarioActualizado);
+    try {
+        // console.log(NombreUsuarioActualizado);
+        await db.collection('usuarios').doc(user.email).update({
+            displayName:NombreUsuarioActualizado
+        });
+        const usuario={
+            ...user,
+            displayName:NombreUsuarioActualizado
+        }
+
+        dispatch({
+            type:USUARIO_EXITO,
+            payload:usuario
+        })
+        localStorage.setItem('usuario', JSON.stringify(usuario))
+    } catch (error) {
+        // console.log(error);
+    }
+}
+
+
+export const editarFotoAccion =(imagenEditada) =>async(dispatch,getState)=>{
+    dispatch({
+        type:LOADING
+    })
+    const {user} =getState().usuarioGoogle
+    // console.log(user);
+    try {
+        const imgRef = storage.ref().child(user.email).child('foto-perfil')
+        await imgRef.put(imagenEditada)
+        const imgUrl = await imgRef.getDownloadURL()
+
+        await db.collection('usuarios').doc(user.email).update({
+            photoURL:imgUrl
+        })
+        const usuario={
+            ...user,
+            photoURL:imgUrl
+        }
+
+        dispatch({
+            type:USUARIO_EXITO,
+            payload:usuario
+        })
+        localStorage.setItem('usuario', JSON.stringify(usuario))
+        
+    } catch (error) {
+        console.log(error);
+    }
 }
