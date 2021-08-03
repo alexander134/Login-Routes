@@ -4,7 +4,7 @@ import Pokemones from '../Redux/reduxComponentes/Pokemones'
 const Redux = () => {
 
     return (
-        <Pokemones/>
+        <Pokemones/> 
     )
 }
 
